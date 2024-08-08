@@ -26,6 +26,9 @@
             overflow: auto;
             border-radius: 0.3em;
         }
+        .code-container {
+            position: relative;
+        }
         .copy-button {
             position: absolute;
             top: 5px;
@@ -35,6 +38,7 @@
             border: none;
             border-radius: 3px;
             cursor: pointer;
+            z-index: 10;
         }
         .copy-button:hover {
             background: #e0e0e0;
@@ -249,6 +253,11 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvi
 
         document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelectorAll('pre').forEach((block) => {
+                let container = document.createElement('div');
+                container.className = 'code-container';
+                block.parentNode.insertBefore(container, block);
+                container.appendChild(block);
+
                 let button = document.createElement('button');
                 button.className = 'copy-button';
                 button.textContent = 'Copy';
@@ -263,7 +272,7 @@ conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvi
                     }, 2000);
                 });
                 
-                block.appendChild(button);
+                container.appendChild(button);
             });
         });
     </script>
