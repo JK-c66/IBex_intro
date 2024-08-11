@@ -218,8 +218,8 @@ jupyter notebook --no-browser --ip=$IP</code></pre>
     <div class="step">
         <h2>8. Add Aliases to .bashrc</h2>
         <p>Add aliases for the GPU and Jupyter scripts:</p>
-        <pre><code class="language-bash">echo "alias gpu='bash /home/\$USER/srun_gpu.sh'" >> ~/.bashrc
-echo "alias start_jupyter=\'bash /home/\$USER/start_jupyter.sh\'" >> ~/.bashrc
+        <pre><code class="language-bash">echo "alias gpu='bash ~/srun_gpu.sh'" >> ~/.bashrc
+echo "alias start_jupyter='bash ~/start_jupyter.sh'" >> ~/.bashrc
 source ~/.bashrc</code></pre>
     </div>
 
