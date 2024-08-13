@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive guide for setting up IBEX with detailed instructions for SSH configuration, environment setup, and custom scripts.">
     <title>IBEX Setup Guide</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-bash.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <style>
-       :root {
+        :root {
             --kaust-blue: #005DA4;
             --kaust-green: #8AC543;
             --kaust-orange: #F7941E;
@@ -22,6 +19,7 @@
             --sidebar-width: 250px;
         }
 
+        /* Add more custom properties for easy theming */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -30,6 +28,46 @@
             padding: 0;
             display: flex;
             background-color: var(--background-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Improve responsive design */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            #sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            #main-content {
+                margin-left: 0;
+                padding: 10px;
+            }
+        }
+
+        /* Optimize styles for better performance */
+        #sidebar, #main-content, .copy-button, #dark-mode-toggle {
+            will-change: transform;
+        }
+
+        /* Improve accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Add smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
 
         #sidebar {
@@ -44,13 +82,62 @@
             padding: 20px;
             box-sizing: border-box;
         }
+        /* Add print styles */
+        @media print {
+            body {
+                font-size: 12pt;
+            }
+            #sidebar, #dark-mode-toggle, #progress-container {
+                display: none;
+            }
+            #main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            a[href]:after {
+                content: " (" attr(href) ")";
+            }
+            .code-container, pre[class*="language-"] {
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+        }
 
+        /* Improve accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--kaust-blue);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Optimize for mobile devices */
+        @media (max-width: 768px) {
+            #sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            #main-content {
+                margin-left: 0;
+                padding: 10px;
+            }
+            .video-container {
+                padding-bottom: 75%; /* Adjust aspect ratio for mobile */
+            }
+        }
         #main-content {
             margin-left: var(--sidebar-width);
             padding: 20px;
             max-width: 800px;
             background-color: var(--background-color);
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);   
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 5px;
             margin-top: 20px;
             margin-bottom: 20px;
@@ -61,48 +148,61 @@
         }
 
         pre[class*="language-"] {
-    position: relative;
-    padding: 1em;
-    margin: .5em 0;
-    overflow: auto;
-    border-radius: 0.3em;
-    background: #003D6E; /* Darker shade of KAUST blue for better contrast */
-    color: #FFFFFF;
-}
+            position: relative;
+            padding: 1em;
+            margin: .5em 0;
+            overflow: auto;
+            border-radius: 0.3em;
+            background: #003D6E;
+            color: #FFFFFF;
+        }
 
-.code-container {
-    position: relative;
-    margin-bottom: 15px;
-    border-radius: 0.3em;
-}
+        .code-container {
+            position: relative;
+            margin-bottom: 15px;
+            border-radius: 0.3em;
+        }
 
-.copy-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    padding: 5px 10px;
-    background: var(--kaust-yellow);
-    color: #003D6E; /* Darker text for better contrast on yellow */
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    z-index: 10;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-weight: bold;
-}
+        .copy-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 5px 10px;
+            background: var(--kaust-yellow);
+            color: #003D6E;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: bold;
+        }
 
-.copy-button:hover {
-    background: var(--kaust-orange);
-    color: #FFFFFF;
-}
-
+        .copy-button:hover {
+            background: var(--kaust-orange);
+            color: #FFFFFF;
+        }
 
         .step {
             margin-bottom: 30px;
             border-bottom: 1px solid var(--kaust-light-blue);
             padding-bottom: 20px;
         }
-
+        .pytorch-note {
+            background-color: #045699; /* PyTorch's orange color */
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        .pytorch-note a {
+            color: #FFD700; /* Gold color for the link */
+            text-decoration: underline;
+        }
+        .pytorch-note a:hover {
+            color: #FFFFFF; /* White color on hover */
+        }
         #table-of-contents h2 {
             margin-top: 0;
             color: var(--background-color);
@@ -250,7 +350,6 @@
             border: 1px solid var(--kaust-blue);
         }
 
-        /* Dark mode toggle button styles */
         #dark-mode-toggle {
             position: fixed;
             top: 20px;
@@ -277,7 +376,23 @@
             transform: scale(1.1);
         }
 
-        /* Dark mode styles */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
         body.dark-mode {
             background-color: #1a1a1a;
             color: #f0f0f0;
@@ -299,8 +414,8 @@
         }
 
         body.dark-mode pre[class*="language-"] {
-    background: #1E3A5F; /* Slightly lighter than the dark mode background for contrast */
-}
+            background: #1E3A5F;
+        }
 
         body.dark-mode .important-note,
         body.dark-mode .note,
@@ -315,21 +430,21 @@
         }
 
         body.dark-mode .copy-button {
-    background-color: var(--kaust-green);
-    color: #003D6E;
-}
+            background-color: var(--kaust-green);
+            color: #003D6E;
+        }
 
-body.dark-mode .copy-button:hover {
-    background-color: var(--kaust-light-blue);
-    color: #FFFFFF;
-}
+        body.dark-mode .copy-button:hover {
+            background-color: var(--kaust-light-blue);
+            color: #FFFFFF;
+        }
 
         body.dark-mode .highlight {
             background-color: var(--kaust-orange);
             color: var(--background-color);
         }
 
-        body.dark-mode .file-path, 
+        body.dark-mode .file-path,
         body.dark-mode .command-example {
             background-color: var(--kaust-blue);
             color: var(--background-color);
@@ -342,17 +457,33 @@ body.dark-mode .copy-button:hover {
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Dark Mode Toggle Button -->
     <button id="dark-mode-toggle" aria-label="Toggle dark mode">
         <i class="fas fa-moon"></i>
+        <span class="visually-hidden">Toggle Dark Mode</span>
     </button>
-    <div id="progress-container">
+
+    <!-- Progress Bar -->
+    <div id="progress-container" aria-hidden="true">
         <div id="progress-bar"></div>
     </div>
 
-    <div id="sidebar">
+    <!-- Sidebar with Table of Contents -->
+    <nav id="sidebar">
         <div id="table-of-contents">
-            <h2><i class="fas fa-list"></i> Contents</h2>
-            
+            <h2><i class="fas fa-list" aria-hidden="true"></i> Contents</h2>
+
+            <!-- Introduction Section -->
+            <div class="toc-section">
+                <div class="toc-section-title">Introduction</div>
+                <ul>
+                    <li><a href="#video-tutorial">Video Tutorial</a></li>
+                </ul>
+            </div>
+
+            <!-- Initial Setup Section -->
             <div class="toc-section">
                 <div class="toc-section-title">Initial Setup</div>
                 <ul>
@@ -362,7 +493,8 @@ body.dark-mode .copy-button:hover {
                     <li><a href="#add-ssh-key">Add SSH Key</a></li>
                 </ul>
             </div>
-            
+
+            <!-- Environment Setup Section -->
             <div class="toc-section">
                 <div class="toc-section-title">Environment Setup</div>
                 <ul>
@@ -370,7 +502,8 @@ body.dark-mode .copy-button:hover {
                     <li><a href="#conda-env">Set Up Conda Environment</a></li>
                 </ul>
             </div>
-            
+
+            <!-- Custom Scripts Section -->
             <div class="toc-section">
                 <div class="toc-section-title">Custom Scripts</div>
                 <ul>
@@ -379,7 +512,8 @@ body.dark-mode .copy-button:hover {
                     <li><a href="#add-aliases">Add Aliases to .bashrc</a></li>
                 </ul>
             </div>
-            
+
+            <!-- Usage Guide Section -->
             <div class="toc-section">
                 <div class="toc-section-title">Usage Guide</div>
                 <ul>
@@ -387,17 +521,29 @@ body.dark-mode .copy-button:hover {
                 </ul>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <div id="main-content">
+    <!-- Main Content -->
+    <main id="main-content">
         <h1>IBEX Setup Guide</h1>
 
+        <!-- Video Tutorial Section -->
+        <div class="step" id="video-tutorial">
+            <h2><i class="fas fa-video icon"></i> Video Tutorial</h2>
+            <p>If you prefer a video walkthrough, watch this tutorial that covers the IBEX setup process:</p>
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/Vw5DALZFizo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <p>For detailed written instructions, continue reading below.</p>
+        </div>
+
+        <!-- SSH Configuration Section -->
         <div class="step" id="ssh-config">
             <h2><i class="fas fa-cog icon"></i> SSH Configuration</h2>
             <p>First, open the ssh config file:</p>
             <div class="code-container">
-                <pre><code class="language-bash">notepad .ssh\config 
-or
+                <pre><code class="language-bash">notepad .ssh\config
+# or
 code .ssh\config</code></pre>
             </div>
             <p>Add the following to the config file:</p>
@@ -409,6 +555,7 @@ code .ssh\config</code></pre>
             <p class="important-note"><i class="fas fa-exclamation-circle"></i> <strong>Important:</strong> Replace <span class="highlight">"USERNAME"</span> with your actual IBEX username.</p>
         </div>
 
+        <!-- Generate SSH Key Section -->
         <div class="step" id="ssh-key">
             <h2><i class="fas fa-key icon"></i> Generate SSH Key</h2>
             <p>Follow these steps to generate an SSH key on your computer and prepare it for use with IBEX:</p>
@@ -423,7 +570,7 @@ code .ssh\config</code></pre>
                     <p>When prompted for a file to save the key, press Enter to accept the default location.</p>
                 </li>
                 <li>
-                    <p>You'll be asked to enter a passphrase, press Enter twice for no passphrase. OR For added security, enter a passphrase </p>
+                    <p>You'll be asked to enter a passphrase. Press Enter twice for no passphrase, or enter a passphrase for added security.</p>
                 </li>
                 <li>
                     <p>Locate the public key file. By default, it's saved as:</p>
@@ -435,13 +582,13 @@ code .ssh\config</code></pre>
                 <li>
                     <p>Open the public key file in a text editor:</p>
                     <ul>
-                        <li>On Windows: 
+                        <li>On Windows:
                             <div class="code-container">
                                 <pre><code class="language-bash">cd %USERPROFILE%\.ssh
 notepad id_rsa.pub</code></pre>
                             </div>
                         </li>
-                        <li>On macOS/Linux: 
+                        <li>On macOS/Linux:
                             <div class="code-container">
                                 <pre><code class="language-bash">open -e ~/.ssh/id_rsa.pub</code></pre>
                             </div>
@@ -456,9 +603,9 @@ notepad id_rsa.pub</code></pre>
             <div class="important-note">
                 <i class="fas fa-exclamation-circle"></i> <strong>Important:</strong> Keep your private key (id_rsa) secure and never share it. You'll use the public key (id_rsa.pub) in the next steps to set up access to IBEX.
             </div>
-            <p>Now that you have your public key ready, proceed to the next step where you'll add it to your IBEX account.</p>
         </div>
 
+        <!-- Connect to IBEX Section -->
         <div class="step" id="connect-ibex">
             <h2><i class="fas fa-plug icon"></i> Connect to IBEX</h2>
             <p>Connect to IBEX using the following command:</p>
@@ -467,6 +614,7 @@ notepad id_rsa.pub</code></pre>
             </div>
         </div>
 
+        <!-- Add SSH Key to Authorized Keys Section -->
         <div class="step" id="add-ssh-key">
             <h2><i class="fas fa-lock icon"></i> Add SSH Key to Authorized Keys</h2>
             <p>After connecting to IBEX, add your key to the authorized_keys file:</p>
@@ -476,20 +624,18 @@ notepad id_rsa.pub</code></pre>
             <p>Paste your public key into this file and save.</p>
         </div>
 
+        <!-- Install Miniconda Section -->
         <div class="step" id="install-miniconda">
             <h2><i class="fas fa-download icon"></i> Install Miniconda</h2>
             <p>Download and install Miniconda:</p>
             <div class="code-container">
-                <pre><code class="language-bash">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh</code></pre>
-            </div>
-            <div class="code-container">
-                <pre><code class="language-bash">bash Miniconda3-latest-Linux-x86_64.sh -b</code></pre>
-            </div>
-            <div class="code-container">
-                <pre><code class="language-bash">~/miniconda3/bin/conda init bash && source ~/.bashrc && conda config --set auto_activate_base false</code></pre>
+                <pre><code class="language-bash">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b
+~/miniconda3/bin/conda init bash && source ~/.bashrc && conda config --set auto_activate_base false</code></pre>
             </div>
         </div>
-        
+
+        <!-- Create GPU Job Script Section -->
         <div class="step" id="gpu-script">
             <h2><i class="fas fa-file-code icon"></i> Create GPU Job Script</h2>
             <p>Create a script for running GPU jobs:</p>
@@ -499,6 +645,7 @@ notepad id_rsa.pub</code></pre>
             <p>Paste the following content into the file:</p>
             <div class="code-container">
                 <pre><code class="language-bash">#!/bin/bash
+
 # Color definitions
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -545,29 +692,29 @@ print_help() {
 # Function to list jobs with GPU and node details
 list_jobs() {
     echo -e "${BLUE}Your running jobs:${NC}"
-    
+
     # Get the job list with a format suitable for table output
     job_list=$(squeue -u $USER --format="%.18i %.12P %.20j %.10u %.2t %.10M %.6D %.18R %.20b")
 
     # Print the job list header in a table-like format
     printf "${CYAN}%-18s %-12s %-20s %-10s %-2s %-10s %-6s %-18s %-20s${NC}\n" \
-           "JOBID" "PARTITION" "NAME" "USER" "ST" "TIME" "NODES" "NODELIST(REASON)" "GPU(s)"
-    
+            "JOBID" "PARTITION" "NAME" "USER" "ST" "TIME" "NODES" "NODELIST(REASON)" "GPU(s)"
+
     echo "$job_list" | while read -r line; do
         # Skip the header or empty lines
         if [[ "$line" == JOBID* ]] || [ -z "$line" ]; then
             continue
         fi
-        
+
         # Extract the JOBID and TRES_PER_NODE from each line
         job_id=$(echo $line | awk '{print $1}')
         tres_per_node=$(echo $line | awk '{print $NF}')
-        
+
         # Validate the JOBID
         if [[ "$job_id" =~ ^[0-9]+$ ]]; then
             # Extract GPU information from TRES_PER_NODE
             gpu_info=$(echo $tres_per_node | grep -oP 'gpu:[^,]+')
-            
+
             # If gpu_info is empty, set it to "N/A"
             if [ -z "$gpu_info" ]; then
                 gpu_info="N/A"
@@ -578,14 +725,14 @@ list_jobs() {
 
             # Print the line with GPU info in a well-aligned format
             printf "${YELLOW}%-18s %-12s %-20s %-10s %-2s %-10s %-6s %-18s ${GREEN}%-20s${NC}\n" \
-                   "$job_id" "$(echo $line | awk '{print $2}')" \
-                   "$(echo $line | awk '{print $3}')" \
-                   "$(echo $line | awk '{print $4}')" \
-                   "$(echo $line | awk '{print $5}')" \
-                   "$(echo $line | awk '{print $6}')" \
-                   "$(echo $line | awk '{print $7}')" \
-                   "$(echo $line | awk '{print $8}')" \
-                   "$gpu_info"
+                    "$job_id" "$(echo $line | awk '{print $2}')" \
+                    "$(echo $line | awk '{print $3}')" \
+                    "$(echo $line | awk '{print $4}')" \
+                    "$(echo $line | awk '{print $5}')" \
+                    "$(echo $line | awk '{print $6}')" \
+                    "$(echo $line | awk '{print $7}')" \
+                    "$(echo $line | awk '{print $8}')" \
+                    "$gpu_info"
         else
             # Print the original line if JOBID is invalid
             echo -e "$line"
@@ -619,7 +766,6 @@ cancel_job() {
         echo -e "${RED}Failed to cancel job $1. Please try again or contact system administrator.${NC}"
     fi
 }
-
 
 # Function to cancel all jobs
 cancel_all_jobs() {
@@ -710,15 +856,17 @@ fi   </code></pre>
             </div>
         </div>
 
+        <!-- Create Jupyter Notebook Script Section -->
         <div class="step" id="jupyter-script">
             <h2><i class="fas fa-file-code icon"></i> Create Jupyter Notebook Script</h2>
             <p>Create a script for starting Jupyter Notebook:</p>
-            <div class="code-container">
+             <div class="code-container">
                 <pre><code class="language-bash">nano start_jupyter.sh</code></pre>
             </div>
             <p>Paste the following content into the file:</p>
             <div class="code-container">
                 <pre><code class="language-bash">#!/bin/bash
+
 # Get the current IP address
 IP=$(hostname -I | awk '{print $1}')
 
@@ -731,6 +879,7 @@ jupyter notebook --no-browser --ip=$IP</code></pre>
             </div>
         </div>
 
+        <!-- Add Aliases to .bashrc Section -->
         <div class="step" id="add-aliases">
             <h2><i class="fas fa-terminal icon"></i> Add Aliases to .bashrc</h2>
             <p>Add aliases for the GPU and Jupyter scripts with this single command:</p>
@@ -749,16 +898,17 @@ jupyter notebook --no-browser --ip=$IP</code></pre>
             <div class="usage-instructions">
                 <p>After running this command, you can use the following shortcuts:</p>
                 <ul>
-                    <li>To start a GPU session: <code>gpu</code></li>
-                    <li>To start Jupyter Notebook: <code>start_jupyter</code></li>
+                    <li>To start a GPU session: <span class="file-path"> gpu </span></li>
+                    <li>To start Jupyter Notebook: <span class="file-path"> start_jupyter </span> </li>
                 </ul>
             </div>
         </div>
 
+        <!-- Set Up Conda Environment Section -->
         <div class="step" id="conda-env">
             <h2><i class="fas fa-cube icon"></i> Set Up Conda Environment</h2>
             <p>Follow these steps to create a new Conda environment with PyTorch and Jupyter:</p>
-            
+
             <ol class="setup-steps">
                 <li>
                     <p>Create a new Conda environment named 'torch':</p>
@@ -766,38 +916,37 @@ jupyter notebook --no-browser --ip=$IP</code></pre>
                         <pre><code class="language-bash">conda create -n torch -y</code></pre>
                     </div>
                 </li>
-                
+            
                 <li>
                     <p>Activate the new environment:</p>
                     <div class="code-container">
                         <pre><code class="language-bash">conda activate torch</code></pre>
                     </div>
                 </li>
-                
+            
                 <li>
                     <p>Install Jupyter in the environment:</p>
                     <div class="code-container">
-                        <pre><code class="language-bash">conda install jupyter</code></pre>
+                        <pre><code class="language-bash">conda install jupyter -y</code></pre>
                     </div>
                 </li>
-                
+            
                 <li>
                     <p>Install PyTorch with CUDA support:</p>
                     <div class="code-container">
                         <pre><code class="language-bash">conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia</code></pre>
                     </div>
-                    <p class="note"><strong>Note:</strong> The specific version of PyTorch and CUDA may need to be adjusted based on your system requirements and the latest available versions.</p>
                 </li>
             </ol>
-        
+            <p class="pytorch-note"><strong>Note:</strong> The specific version of PyTorch and CUDA may need to be adjusted based on your system requirements and the latest available versions. For the most up-to-date installation instructions, please refer to the <a href="https://pytorch.org/get-started/locally/" target="_blank" rel="noopener noreferrer">official PyTorch installation guide</a>.</p>
             <p>After completing the setup, you can use the following commands to activate or deactivate the environment:</p>
-        
+
             <div class="usage-instructions">
                 <p>To activate the environment:</p>
                 <div class="code-container">
                     <pre><code class="language-bash">conda activate torch</code></pre>
                 </div>
-        
+
                 <p>To deactivate the environment when you're done:</p>
                 <div class="code-container">
                     <pre><code class="language-bash">conda deactivate</code></pre>
@@ -805,6 +954,7 @@ jupyter notebook --no-browser --ip=$IP</code></pre>
             </div>
         </div>
 
+        <!-- Using the Setup Section -->
         <div class="step" id="using-setup">
             <h2><i class="fas fa-play icon"></i> Using the Setup</h2>
             <p>To use a GPU:</p>
@@ -820,47 +970,54 @@ jupyter notebook --no-browser --ip=$IP</code></pre>
                 <pre><code class="language-bash">start_jupyter</code></pre>
             </div>
         </div>
-    </div>
-
+</main>
+    <!-- JavaScript for functionality -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-bash.min.js"></script>
     <script>
         // JavaScript functions
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(function() {
+        // Use modern JavaScript features and best practices
+        const copyToClipboard = async (text) => {
+            try {
+                await navigator.clipboard.writeText(text);
                 console.log('Copying to clipboard was successful!');
-            }, function(err) {
+            } catch (err) {
                 console.error('Could not copy text: ', err);
-            });
-        }
+            }
+        };
 
-        function updateProgressBar() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const updateProgressBar = () => {
+            const winScroll = document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
-            document.getElementById("progress-bar").style.width = scrolled + "%";
-        }
+            document.getElementById("progress-bar").style.width = `${scrolled}%`;
+        };
 
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelectorAll('pre').forEach((block) => {
-                let button = document.createElement('button');
-                button.className = 'copy-button';
-                button.textContent = 'Copy';
-                
-                button.addEventListener('click', function () {
-                    let code = block.querySelector('code');
-                    copyToClipboard(code.textContent);
-                    
-                    button.textContent = 'Copied!';
-                    setTimeout(() => {
-                        button.textContent = 'Copy';
-                    }, 2000);
-                });
-                
-                block.parentNode.appendChild(button);
-            });
+        // Use event delegation for better performance
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('copy-button')) {
+                const codeBlock = event.target.previousElementSibling;
+                const code = codeBlock.querySelector('code').textContent;
+                copyToClipboard(code);
+                event.target.textContent = 'Copied!';
+                setTimeout(() => {
+                    event.target.textContent = 'Copy';
+                }, 2000);
+            }
         });
 
-        window.onscroll = function() {updateProgressBar()};
+        // Debounce function for scroll event
+        const debounce = (func, wait) => {
+            let timeout;
+            return () => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, arguments), wait);
+            };
+        };
+
+        const debouncedUpdateProgressBar = debounce(updateProgressBar, 10);
+        window.addEventListener('scroll', debouncedUpdateProgressBar);
+
         // Dark mode toggle functionality
         const darkModeToggle = document.getElementById('dark-mode-toggle');
         const body = document.body;
@@ -868,34 +1025,58 @@ jupyter notebook --no-browser --ip=$IP</code></pre>
 
         darkModeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
-            if (body.classList.contains('dark-mode')) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            }
+            const isDarkMode = body.classList.contains('dark-mode');
+            icon.classList.toggle('fa-moon', !isDarkMode);
+            icon.classList.toggle('fa-sun', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
         });
 
         // Check for user's preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const storedDarkMode = localStorage.getItem('darkMode');
+
+        if (storedDarkMode !== null) {
+            body.classList.toggle('dark-mode', JSON.parse(storedDarkMode));
+        } else if (prefersDarkScheme.matches) {
             body.classList.add('dark-mode');
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
         }
 
+        // Update icon based on current mode
+        icon.classList.toggle('fa-sun', body.classList.contains('dark-mode'));
+        icon.classList.toggle('fa-moon', !body.classList.contains('dark-mode'));
+
         // Listen for changes in color scheme preference
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            if (e.matches) {
-                body.classList.add('dark-mode');
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            } else {
-                body.classList.remove('dark-mode');
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
+        prefersDarkScheme.addEventListener('change', (e) => {
+            if (storedDarkMode === null) {
+                body.classList.toggle('dark-mode', e.matches);
+                icon.classList.toggle('fa-sun', e.matches);
+                icon.classList.toggle('fa-moon', !e.matches);
             }
-        });    
+        });
+
+        // Add copy buttons to code blocks
+        document.querySelectorAll('pre').forEach((block) => {
+            const button = document.createElement('button');
+            button.className = 'copy-button';
+            button.textContent = 'Copy';
+            block.parentNode.appendChild(button);
+        });
+        // Add keyboard navigation for accessibility
+        let isTabbing = false;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab' && !isTabbing) {
+                isTabbing = true;
+                document.body.classList.add('user-is-tabbing');
+            }
+        });
+
+        document.addEventListener('mousedown', () => {
+            if (isTabbing) {
+                isTabbing = false;
+                document.body.classList.remove('user-is-tabbing');
+            }
+        });
     </script>
 </body>
 </html>
